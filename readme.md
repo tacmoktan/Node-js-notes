@@ -119,3 +119,68 @@ module.exports.log = log;
     module.exports.log = log;
 });
 ```
+### 6. Path Module
+* built-in module for node js. 
+* provides several methods for working with file and directory paths. 
+* The methods can yeild varying results according to OS used (Windows , POSIX).  
+e.g.
+ `path.parse(<pathString>)` => returns object for given path (string) like **"E:\\VSCode files\\NodePractice\\first-app\\app.js"**
+```js
+const path = require('path');           //loads path module  
+
+const pathObj = path.parse(__filename); //returns an object using file directory input
+console.log(pathObj);
+
+/* //output 
+{   root: 'E:\\',
+    dir: 'E:\\VSCode files\\NodePractice\\first-app',
+    base:'app.js',
+    ext: '.js'm
+    name: 'app'
+} 
+*/
+```
+### 7. OS module
+* built-in module for node js.
+* provides numerous useful OS related methods like `os.freemem()`, `os.totalmem()`, etc.  
+e.g.  
+```js
+const os = require('os');           //loads operating system module
+
+let freeMemory = os.freemem();      //returns free system memory in bytes as integer
+let totalMemory = os.totalmem();    //returns total system memory in bytes as integer
+console.log(`Free System memory = ${freeMemory}`);              
+console.log(`Total System memory = ${totalMemory}`);
+```
+
+### 8. File System Module
+* built-in module for node js.
+* provides methods or API for interacting with file system. 
+* File System operation/method types: **Synchronous** and **Asynchronous**.
+* Asynchronous operation takes *call back function* as its last argument.  
+e.g. `fs.readdir(<pathString>,<callBackFunction>);`
+```js
+const fs = require('fs');               //loads file system module
+
+fs.readdir('./', function(err, files){    
+    if (err) console.log("error",err)   // returns error msg
+    else console.log("Result",files);   // returns array of files located in the directory
+});
+```
+**NOTE**: Asynchronous operations are more efficient than synchronous ones.
+
+### 9. Events Module
+* built-in module.
+* has a *EventEmitter* class that consist of several methods used for event handling.
+* An instance of *EventEmitter* class is created to create event and register a listener(event handler).
+```js
+const EventEmitter = require('events');     //loads EventEmitter class
+const emitter = new EventEmitter();         //creates instance of EventEmitter class
+
+emitter.on('event',()=>{                    //registers a listener
+    console.log('event triggered');
+});
+
+emitter.emit('event');                      //creates event
+```
+**NOTE:** Always register a listener first then create an event for it because when an event is created, it looks for the event listener registered before it.
