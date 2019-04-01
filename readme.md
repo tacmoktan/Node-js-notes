@@ -184,3 +184,73 @@ emitter.on('event',()=>{                    //registers a listener
 emitter.emit('event');                      //creates event
 ```
 **NOTE:** Always register a listener first then create an event for it because when an event is created, it looks for the event listener registered before it.
+
+### 10. Event Arguments
+* Arguments can be passed in the call back function of listener.
+* It's a good practice to pass arguments in object form.
+```js
+const EventEmitter = require('events');                 //loads EventEmitter class
+const emitter = new EventEmitter();                     //creates instance of that class
+
+emitter.on('event', (args) => {                         //registers a listener
+    console.log('Listener called ',args);
+});
+
+emitter.emit('event', {id:1, name:'youtube', url:'http://'}); //creates event, passes arg in object form
+```
+
+### 11. Extending EventEmitter
+* The EventEmitter can be extended by a custom class i.e. EventEmitter class properties can be inherited by a custom class. 
+* This helps to create event within the class. The class can be exported and loaded to other module.
+* Other modules can register event listeners for that event. 
+
+e.g.
+```js
+//logger.js
+const EventEmitter = require('events');         //loads EventEmitter class  
+
+class Logger extends EventEmitter{              //Logger class inherits from EventEmitter class
+    log(message, eventArgs){
+        console.log('message = ',message);
+
+        this.emit('event', eventArgs);    //to create event
+    }
+}
+
+module.exports = Logger;    //exports Logger class
+```
+```js
+//app.js
+const Logger = require('./logger.js');         //loads Logger class
+const loggerObj = new Logger();
+
+loggerObj.on('event',(args)=>{                     //registering event listener
+    console.log('Listener called ', args);
+});
+
+loggerObj.log('message', {id: 1, url:'http://'} );  //passing arguments to log function
+```
+### 12. HTTP module
+* The module has methods that perform all http operations.
+* Performing numerous amount of requests and responses can be complex.
+* So we use **Express.js framework** for http operations.  
+e.g. 
+```js
+const http = require('http');           //loads http module
+const server = http.createServer( (req, res) => {   //creates server
+    
+    if(req.url === "/"){               
+        res.write('home page');
+        res.end();
+    }
+
+    if(req.url === "/api/courses"){ 
+        res.write(JSON.stringify([ 1, 2, 3 ]));
+        res.end();
+    }
+        
+});
+
+server.listen(1000);                //chooses server port no. 1000
+console.log("Listening on port 1000...")
+```
